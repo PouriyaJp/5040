@@ -10,6 +10,7 @@ use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Consultant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
@@ -22,18 +23,35 @@ class AppointmentController extends Controller
 
     public function store(AppointmentRequest $request)
     {
+        // Start a transaction
+        DB::beginTransaction();
 
-        $inputs = $request->all();
+        try {
+            $inputs = $request->all();
 
-        $appointment = Appointment::create($inputs);
+            // Create appointment
+            $appointment = Appointment::create($inputs);
 
-        // Send email notification
-        $consultant = Consultant::find($request->consultant_id);
-        $client = Client::find($request->client_id);
-        Mail::to($consultant->email)->send(new AppointmentNotification($appointment));
-        Mail::to($client->email)->send(new AppointmentNotification($appointment));
+            // Fetch consultant and client
+            $consultant = Consultant::find($request->consultant_id);
+            $client = Client::find($request->client_id);
 
-        return response()->json($appointment, 201);
+            // Send email notifications
+            Mail::to($consultant->email)->send(new AppointmentNotification($appointment));
+            Mail::to($client->email)->send(new AppointmentNotification($appointment));
+
+            // Commit the transaction
+            DB::commit();
+
+            return response()->json($appointment, 201);
+
+        } catch (\Exception $e) {
+            // Rollback the transaction in case of an error
+            DB::rollBack();
+
+            // Optionally, handle the error, for example:
+            return response()->json(['error' => 'Could not create appointment'], 500);
+        }
     }
 
     public function show(Appointment $appointment)
