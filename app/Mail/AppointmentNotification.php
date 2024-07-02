@@ -23,7 +23,8 @@ class AppointmentNotification extends Mailable
 
     public function build()
     {
-        return $this->view('emails.appointment')
-            ->with('appointment', $this->appointment);
+        return $this->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('New Appointment Notification')
+            ->view('emails.appointment');
     }
 }

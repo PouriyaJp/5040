@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('consultant_id')->constrained()->onDelete('cascade');
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->dateTime('appointment_time');
+            $table->timestamp();
         });
     }
 

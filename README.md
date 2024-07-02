@@ -7,60 +7,84 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About the Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project is a simple Restful application built with the Laravel framework for managing consultants and scheduling appointments for clients. The application includes the following features:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Create and list consultants (including displaying their appointments).
+-  Register appointments by clients and list these appointments (shown in both the consultant's and client's lists).
+- Create and list clients (with their appointments displayed in their list).
+- Statistical features:
+- - Number of appointments for each client and consultant.
+- -  Number of clients for each consultant.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
 
-## Learning Laravel
+- Consultants Management: Allows the creation and listing of consultants along with their appointments.
+- Clients Management: Enables the creation and listing of clients along with their appointments.
+- Appointments Management: Allows clients to book appointments with consultants. Upon booking, both the client and the consultant receive an email notification.
+- Statistics: Provides data on the number of appointments per client and consultant, and the number of clients per consultant.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Project Structure
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Controllers
+- ConsultantController: Manages CRUD operations for consultants.
+- ClientController: Manages CRUD operations for clients.
+- AppointmentController: Manages CRUD operations for appointments and sends email notifications upon booking.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Requests
 
-## Laravel Sponsors
+Form requests for validating inputs.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+-  ConsultantRequest: Validates the data for creating a new consultant.
+-  UpdateConsultantRequest: Validates the data for updating an existing consultant.
+-  ClientRequest: Validates the data for creating a new client.
+-  UpdateClientRequest: Validates the data for updating an existing client.
+-  AppointmentRequest: Validates the data for creating a new appointment.
+-  UpdateAppointmentRequest: Validates the data for updating an existing appointment.
 
-### Premium Partners
+### Models
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- Consultant: Represents the consultants in the system.
+- Client: Represents the clients in the system.
+- Appointment: Represents the appointments between consultants and clients.
 
-## Contributing
+### Resources
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- ConsultantResource: Formats the data for consultants when returning it in responses.
+- ClientResource: Formats the data for clients when returning it in responses.
+- AppointmentResource: Formats the data for appointments when returning it in responses.
 
-## Code of Conduct
+### Mail
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- AppointmentNotification: Handles the structure and content of the emails sent to consultants and clients when a new appointment is created.
 
-## Security Vulnerabilities
+# How to Use
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Adding a New Consultant
 
-## License
+To add a new consultant, you would send a POST request to the endpoint managed by ConsultantController with the required data validated by StoreConsultantRequest.
+
+### Updating an Existing Consultant
+To update an existing consultant, you would send a PUT or PATCH request to the appropriate endpoint with the data validated by UpdateConsultantRequest.
+
+### Listing All Consultants
+To list all consultants along with their appointments, you would send a GET request to the endpoint managed by ConsultantController.
+
+### Adding a New Client
+To add a new client, you would send a POST request to the endpoint managed by ClientController with the required data validated by StoreClientRequest.
+
+### Adding a New Appointment
+To add a new appointment, you would send a POST request to the endpoint managed by AppointmentController with the required data validated by StoreAppointmentRequest. This action will also trigger the AppointmentNotification mail to be sent to both the consultant and the client.
+
+## Configuration
+- MAIL_MAILER=smtp
+- MAIL_HOST=smtp.googlemail.com
+- MAIL_PORT=587
+- MAIL_USERNAME=your_email@gmail.com
+- MAIL_PASSWORD=your_email_password
+- MAIL_ENCRYPTION=tls
+- MAIL_FROM_ADDRESS=your_email@gmail.com
+- MAIL_FROM_NAME="Your App Name"
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
